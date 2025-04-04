@@ -1,7 +1,7 @@
 import { SqlService } from '@/services/Sql'
 import { Effect, Schema } from 'effect'
 
-export const ResultSchema = Schema.Struct({
+const ResultSchema = Schema.Struct({
   tree: Schema.String,
 })
 
