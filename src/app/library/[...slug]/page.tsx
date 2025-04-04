@@ -1,31 +1,62 @@
 import { Metadata } from 'next'
 import { IconGroup } from '../../../components/icon-group/icon-group'
-import { db } from '../../../lib/sqlite'
-import { EmojiSchema } from '../../../schema/emoji'
+import { Emoji } from '../../../schema/emoji'
 import {
   LibraryGroupPageProps,
   LibrarySubgroupPageProps,
   LibraryPageProps,
 } from './types'
+import { Effect } from 'effect'
+import { SqlService } from '@/services/Sql'
 
 function LibraryGroupPage({ group }: LibraryGroupPageProps) {
-  const rows = db
-    .prepare<EmojiSchema['groups'], EmojiSchema>(
-      'SELECT * FROM openmoji WHERE groups = ?'
-    )
-    .all(group)
+  return Effect.runSync(
+    Effect.gen(function* () {
+      const sql = yield* SqlService
+      const result = yield* sql<Emoji>`SELECT * FROM openmoji WHERE ${sql.in(
+        'groups',
+        [group]
+      )}`
 
-  return <IconGroup items={rows} />
+      return result
+    }).pipe(
+      Effect.provide(SqlService.Default),
+      Effect.match({
+        onSuccess(rows) {
+          return <IconGroup items={rows} />
+        },
+        onFailure(error) {
+          console.error(error)
+          return <pre>{JSON.stringify(error, null, 2)}</pre>
+        },
+      })
+    )
+  )
 }
 
 function LibrarySubgroupPage({ group, subgroup }: LibrarySubgroupPageProps) {
-  const rows = db
-    .prepare<[EmojiSchema['groups'], EmojiSchema['subgroups']], EmojiSchema>(
-      'SELECT * FROM openmoji WHERE groups = ? AND subgroups = ?'
-    )
-    .all(group, subgroup)
+  return Effect.runSync(
+    Effect.gen(function* () {
+      const sql = yield* SqlService
+      const result = yield* sql<Emoji>`SELECT * FROM openmoji WHERE ${sql.and([
+        sql.in('groups', [group]),
+        sql.in('subgroups', [subgroup]),
+      ])}`
 
-  return <IconGroup items={rows} />
+      return result
+    }).pipe(
+      Effect.provide(SqlService.Default),
+      Effect.match({
+        onSuccess(rows) {
+          return <IconGroup items={rows} />
+        },
+        onFailure(error) {
+          console.error(error)
+          return <pre>{JSON.stringify(error, null, 2)}</pre>
+        },
+      })
+    )
+  )
 }
 
 export async function generateMetadata({
