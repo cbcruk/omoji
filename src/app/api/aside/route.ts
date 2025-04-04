@@ -1,9 +1,6 @@
 import { SqlService } from '@/services/Sql'
 import { Effect, Schema } from 'effect'
-
-const ResultSchema = Schema.Struct({
-  tree: Schema.String,
-})
+import { ResultSchema } from './schema'
 
 type Result = Schema.Schema.Type<typeof ResultSchema>
 

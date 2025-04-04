@@ -12,6 +12,11 @@ type SearchPageProps = {
   searchParams: Promise<SearchPageSearchParams>
 }
 
+class SearchParamsError extends Data.TaggedError('SearchParamsError')<{
+  readonly message: string
+  readonly cause?: unknown
+}> {}
+
 export async function generateMetadata({
   searchParams,
 }: SearchPageProps): Promise<Metadata> {
@@ -22,30 +27,23 @@ export async function generateMetadata({
   }
 }
 
-export class SearchParamsError extends Data.TaggedError('SearchParamsError')<{
-  readonly message: string
-  readonly cause?: unknown
-}> {}
-
-const genSearchParams = (searchParams: SearchPageProps['searchParams']) =>
-  Effect.gen(function* () {
-    const { q } = yield* Effect.promise(() => searchParams)
-
-    if (!q) {
-      return yield* Effect.fail(
-        new SearchParamsError({
-          message: '검색어를 입력해주세요.',
-        })
-      )
-    }
-
-    return q
-  })
-
 export default async function SearchPage({ searchParams }: SearchPageProps) {
+  const { q } = await searchParams
+
+  if (!q) {
+    return null
+  }
+
   return Effect.runPromise(
     Effect.gen(function* () {
-      const q = yield* genSearchParams(searchParams)
+      if (!q) {
+        return yield* Effect.fail(
+          new SearchParamsError({
+            message: '검색어를 입력해주세요.',
+          })
+        )
+      }
+
       const sql = yield* SqlService
       const pattern = `%${q}%`
       const rows = yield* sql<Emoji>`SELECT * FROM openmoji WHERE ${sql.or([

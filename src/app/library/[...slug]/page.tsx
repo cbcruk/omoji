@@ -6,7 +6,7 @@ import {
   LibrarySubgroupPageProps,
   LibraryPageProps,
 } from './types'
-import { Effect } from 'effect'
+import { Effect, Match } from 'effect'
 import { SqlService } from '@/services/Sql'
 
 function LibraryGroupPage({ group }: LibraryGroupPageProps) {
@@ -73,10 +73,10 @@ export default async function LibraryPage({ params }: LibraryPageProps) {
   const { slug } = await params
   const [group, subgroup] = slug
 
-  switch (true) {
-    case typeof subgroup === 'string':
-      return <LibrarySubgroupPage group={group} subgroup={subgroup} />
-    default:
-      return <LibraryGroupPage group={group} />
-  }
+  return Match.value(subgroup).pipe(
+    Match.when(Match.string, (subgroup) => (
+      <LibrarySubgroupPage group={group} subgroup={subgroup} />
+    )),
+    Match.orElse(() => <LibraryGroupPage group={group} />)
+  )
 }
