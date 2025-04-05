@@ -7,20 +7,20 @@ import {
   LibraryPageProps,
 } from './types'
 import { Effect, Match } from 'effect'
-import { SqlService } from '@/services/Sql'
+import { TursoService } from '@/services/Turso'
 
-function LibraryGroupPage({ group }: LibraryGroupPageProps) {
-  return Effect.runSync(
+async function LibraryGroupPage({ group }: LibraryGroupPageProps) {
+  return Effect.runPromise(
     Effect.gen(function* () {
-      const sql = yield* SqlService
-      const result = yield* sql<Emoji>`SELECT * FROM openmoji WHERE ${sql.in(
-        'groups',
-        [group]
-      )}`
+      const turso = yield* TursoService
+      const result = yield* turso.execute({
+        sql: `SELECT * FROM openmoji WHERE groups = ?`,
+        args: [group],
+      })
 
-      return result
+      return result.rows as unknown as Emoji[]
     }).pipe(
-      Effect.provide(SqlService.Default),
+      Effect.provide(TursoService.Default),
       Effect.match({
         onSuccess(rows) {
           return <IconGroup items={rows} />
@@ -34,18 +34,21 @@ function LibraryGroupPage({ group }: LibraryGroupPageProps) {
   )
 }
 
-function LibrarySubgroupPage({ group, subgroup }: LibrarySubgroupPageProps) {
-  return Effect.runSync(
+async function LibrarySubgroupPage({
+  group,
+  subgroup,
+}: LibrarySubgroupPageProps) {
+  return Effect.runPromise(
     Effect.gen(function* () {
-      const sql = yield* SqlService
-      const result = yield* sql<Emoji>`SELECT * FROM openmoji WHERE ${sql.and([
-        sql.in('groups', [group]),
-        sql.in('subgroups', [subgroup]),
-      ])}`
+      const turso = yield* TursoService
+      const result = yield* turso.execute({
+        sql: `SELECT * FROM openmoji WHERE groups = ? AND subgroups = ?`,
+        args: [group, subgroup],
+      })
 
-      return result
+      return result.rows as unknown as Emoji[]
     }).pipe(
-      Effect.provide(SqlService.Default),
+      Effect.provide(TursoService.Default),
       Effect.match({
         onSuccess(rows) {
           return <IconGroup items={rows} />
