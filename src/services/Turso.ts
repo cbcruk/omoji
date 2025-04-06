@@ -1,4 +1,4 @@
-import { Data, Effect } from 'effect'
+import { Config, Data, Effect } from 'effect'
 import { createClient, InStatement } from '@libsql/client'
 
 class DatabaseError extends Data.TaggedError('DatabaseError')<{
@@ -10,8 +10,11 @@ export class TursoService extends Effect.Service<TursoService>()(
   'TursoService',
   {
     effect: Effect.gen(function* () {
+      const url = yield* Config.string('TURSO_DATABASE_URL')
+      const authToken = yield* Config.string('TURSO_AUTH_TOKEN')
       const turso = createClient({
-        url: 'file:emoji.db',
+        url,
+        authToken,
       })
 
       return {
