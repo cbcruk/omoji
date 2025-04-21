@@ -14,7 +14,7 @@ export const EmojiSchema = Schema.Struct({
   skintone_combination: Schema.NullOr(Schema.String),
   skintone_base_emoji: Schema.NullOr(Schema.String),
   skintone_base_hexcode: Schema.NullOr(Schema.String),
-  unicode: Schema.NullOr(Schema.Number),
+  unicode: Schema.NullOr(Schema.Union(Schema.String, Schema.Number)),
   order: Schema.NullOr(Schema.Number),
 })
 

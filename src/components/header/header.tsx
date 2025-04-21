@@ -1,25 +1,37 @@
 'use client'
 
+import { Effect, pipe } from 'effect'
 import Link from 'next/link'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { Suspense, useActionState } from 'react'
+import { decodeFormDataSchema } from './schema'
 
 function Form() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [, formAction, isPending] = useActionState(
-    (_: unknown, formData: FormData) => {
-      const q = formData.get('q')
-      const searchParams = new URLSearchParams()
+    (_: unknown, formData: FormData) =>
+      Effect.gen(function* () {
+        const searchParams = new URLSearchParams()
 
-      if (q && typeof q === 'string') {
-        searchParams.set('q', q)
-      } else {
-        searchParams.delete('q')
-      }
+        yield* pipe(
+          Effect.succeed(formData.get('q')),
+          Effect.flatMap((q) => decodeFormDataSchema({ q })),
+          Effect.match({
+            onSuccess({ q }) {
+              searchParams.set('q', q)
+            },
+            onFailure() {
+              searchParams.delete('q')
+            },
+          })
+        )
 
-      router.replace(`/search?${searchParams.toString()}`)
-    },
+        return `/search?${searchParams.toString()}`
+      }).pipe(
+        Effect.tap((url) => Effect.sync(() => router.replace(url))),
+        Effect.runSync
+      ),
     null
   )
 
