@@ -4,6 +4,10 @@ import {
   decodeEmojiArraySchema,
   decodeEmojiTreeResponseSchema,
 } from '@/schema/emoji'
+import {
+  LibraryGroupPageProps,
+  LibrarySubgroupPageProps,
+} from '@/app/library/[...slug]/types'
 
 export class EmojiService extends Effect.Service<EmojiService>()(
   'EmojiService',
@@ -21,21 +25,17 @@ export class EmojiService extends Effect.Service<EmojiService>()(
 
             return rows
           }),
-        getListByGroups: (group: string) =>
+        getListByGroup: ({ group }: LibraryGroupPageProps) =>
           Effect.gen(function* () {
             const result = yield* turso.execute({
               sql: `SELECT * FROM openmoji WHERE groups = ?`,
               args: [group],
             })
-
             const rows = yield* decodeEmojiArraySchema(result.rows)
 
             return rows
           }),
-        getListBySubgroups: ({
-          group,
-          subgroup,
-        }: Record<'group' | 'subgroup', string>) =>
+        getListBySubgroup: ({ group, subgroup }: LibrarySubgroupPageProps) =>
           Effect.gen(function* () {
             const result = yield* turso.execute({
               sql: `SELECT * FROM openmoji WHERE groups = ? AND subgroups = ?`,
