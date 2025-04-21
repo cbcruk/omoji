@@ -1,8 +1,7 @@
 import { Metadata } from 'next'
 import { IconGroup } from '../../components/icon-group/icon-group'
-import { Emoji } from '../../schema/emoji'
 import { Data, Effect } from 'effect'
-import { TursoService } from '@/services/Turso'
+import { EmojiService } from '@/services/Emoji'
 
 type SearchPageSearchParams = {
   q: string | undefined
@@ -43,17 +42,14 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           })
         )
       }
-      const turso = yield* TursoService
+
+      const emojiService = yield* EmojiService
       const pattern = `%${q}%`
-      const result = yield* turso.execute({
-        sql: `SELECT * FROM openmoji WHERE 
-        annotation LIKE '${pattern}' OR
-        tags LIKE '${pattern}' OR
-        openmoji_tags LIKE '${pattern}'`,
-      })
-      return result.rows as unknown as Emoji[]
+      const result = yield* emojiService.searchList(pattern)
+
+      return result
     }).pipe(
-      Effect.provide(TursoService.Default),
+      Effect.provide(EmojiService.Default),
       Effect.match({
         onSuccess(rows) {
           return <IconGroup items={rows} />

@@ -6,7 +6,7 @@ export const EmojiSchema = Schema.Struct({
   groups: Schema.String,
   subgroups: Schema.String,
   annotation: Schema.String,
-  tags: Schema.String,
+  tags: Schema.NullOr(Schema.String),
   openmoji_tags: Schema.NullOr(Schema.String),
   openmoji_author: Schema.String,
   openmoji_date: Schema.String,
@@ -18,4 +18,18 @@ export const EmojiSchema = Schema.Struct({
   order: Schema.NullOr(Schema.Number),
 })
 
+export const EmojiArraySchema = Schema.Array(EmojiSchema)
+
+export type EmojiArray = Schema.Schema.Type<typeof EmojiArraySchema>
+
+export const decodeEmojiArraySchema = Schema.decodeUnknown(EmojiArraySchema)
+
 export type Emoji = Schema.Schema.Type<typeof EmojiSchema>
+
+export const EmojiTreeResponseSchema = Schema.Struct({
+  tree: Schema.String,
+})
+
+export const decodeEmojiTreeResponseSchema = Schema.decodeUnknown(
+  EmojiTreeResponseSchema
+)

@@ -1,26 +1,22 @@
 import { Metadata } from 'next'
 import { IconGroup } from '../../../components/icon-group/icon-group'
-import { Emoji } from '../../../schema/emoji'
 import {
   LibraryGroupPageProps,
   LibrarySubgroupPageProps,
   LibraryPageProps,
 } from './types'
 import { Effect, Match } from 'effect'
-import { TursoService } from '@/services/Turso'
+import { EmojiService } from '@/services/Emoji'
 
 async function LibraryGroupPage({ group }: LibraryGroupPageProps) {
   return Effect.runPromise(
     Effect.gen(function* () {
-      const turso = yield* TursoService
-      const result = yield* turso.execute({
-        sql: `SELECT * FROM openmoji WHERE groups = ?`,
-        args: [group],
-      })
+      const emojiService = yield* EmojiService
+      const result = yield* emojiService.getListByGroups(group)
 
-      return result.rows as unknown as Emoji[]
+      return result
     }).pipe(
-      Effect.provide(TursoService.Default),
+      Effect.provide(EmojiService.Default),
       Effect.match({
         onSuccess(rows) {
           return <IconGroup items={rows} />
@@ -40,15 +36,12 @@ async function LibrarySubgroupPage({
 }: LibrarySubgroupPageProps) {
   return Effect.runPromise(
     Effect.gen(function* () {
-      const turso = yield* TursoService
-      const result = yield* turso.execute({
-        sql: `SELECT * FROM openmoji WHERE groups = ? AND subgroups = ?`,
-        args: [group, subgroup],
-      })
+      const emojiService = yield* EmojiService
+      const result = yield* emojiService.getListBySubgroups({ group, subgroup })
 
-      return result.rows as unknown as Emoji[]
+      return result
     }).pipe(
-      Effect.provide(TursoService.Default),
+      Effect.provide(EmojiService.Default),
       Effect.match({
         onSuccess(rows) {
           return <IconGroup items={rows} />

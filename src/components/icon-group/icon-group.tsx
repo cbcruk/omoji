@@ -1,8 +1,8 @@
-import { Emoji } from '../../schema/emoji'
+import { EmojiArray } from '../../schema/emoji'
 import { IconImage } from '../icon-image/icon-image'
 
 type IconGroupProps = {
-  items: readonly Emoji[]
+  items: EmojiArray
 }
 
 export function IconGroup({ items }: IconGroupProps) {
