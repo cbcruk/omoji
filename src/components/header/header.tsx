@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { Suspense, useActionState } from 'react'
 import { decodeFormDataSchema } from './schema'
+import { HeaderIconSizeSelect } from './header-icon-size-select'
 
 function Form() {
   const router = useRouter()
@@ -59,9 +60,12 @@ export function Header() {
         </Link>
       </h1>
 
-      <Suspense fallback={null}>
-        <Form />
-      </Suspense>
+      <div className="flex items-center gap-4">
+        <Suspense fallback={null}>
+          <Form />
+        </Suspense>
+        <HeaderIconSizeSelect />
+      </div>
     </div>
   )
 }

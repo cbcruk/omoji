@@ -1,3 +1,6 @@
+'use client'
+
+import { useIconSizeContext } from '@/context/icon-size-context'
 import Image from 'next/image'
 
 const BASE_URL =
@@ -8,11 +11,13 @@ type IconImageProps = {
 }
 
 export function IconImage({ hexcode }: IconImageProps) {
+  const [size] = useIconSizeContext()
+
   return (
     <Image
       src={`${BASE_URL}/${hexcode}.svg`}
-      width={32}
-      height={32}
+      width={size}
+      height={size}
       alt=""
       loading="lazy"
     />
