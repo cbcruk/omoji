@@ -9,6 +9,7 @@ export function HeaderIconSizeSelect() {
   return (
     <select
       className="self-stretch border border-[--background-end-rgb] rounded-lg"
+      defaultValue={size}
       onChange={(e) => {
         const value = parseInt(e.target.value, 10)
 
@@ -19,7 +20,7 @@ export function HeaderIconSizeSelect() {
         const value = DEFAULT_ICON_SIZE + i * DEFAULT_STEP
 
         return (
-          <option key={value} value={value} selected={size === value}>
+          <option key={value} value={value}>
             {value}
           </option>
         )
