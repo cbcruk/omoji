@@ -11,7 +11,7 @@ export function IconGroup({ items }: IconGroupProps) {
     <div className="flex flex-wrap gap-4">
       {items.map((item) => (
         <Popover.Root key={item.hexcode}>
-          <Popover.Trigger asChild className="cursor-pointer">
+          <Popover.Trigger className="cursor-pointer">
             <IconImage hexcode={item.hexcode} />
           </Popover.Trigger>
           <Popover.Portal>
