@@ -1,8 +1,10 @@
 import { Metadata } from 'next'
+import { Suspense } from 'react'
 import { IconGroup } from '../../components/icon-group/icon-group'
+import { IconGroupSkeleton } from '../../components/icon-group/icon-group-skeleton'
 import { Effect } from 'effect'
 import { EmojiService } from '@/services/Emoji'
-import { SearchPageProps } from './types'
+import { SearchPageProps, SearchPageSearchParams } from './types'
 import { validateSearchQueryGen } from './helpers'
 
 export async function generateMetadata({
@@ -15,9 +17,7 @@ export async function generateMetadata({
   }
 }
 
-export default async function SearchPage({ searchParams }: SearchPageProps) {
-  const { q } = await searchParams
-
+function SearchResult({ q }: SearchPageSearchParams) {
   return Effect.gen(function* () {
     yield* validateSearchQueryGen(q)
 
@@ -37,5 +37,13 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       },
     }),
     Effect.runPromise
+  )
+}
+
+export default function SearchPage({ searchParams }: SearchPageProps) {
+  return (
+    <Suspense fallback={<IconGroupSkeleton />}>
+      {searchParams.then(({ q }) => <SearchResult q={q} />)}
+    </Suspense>
   )
 }

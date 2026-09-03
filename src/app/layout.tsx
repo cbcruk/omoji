@@ -1,7 +1,9 @@
 import './globals.css'
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import { Noto_Sans_Mono } from 'next/font/google'
 import { Aside } from '../components/aside/aside'
+import { AsideLinks } from '../components/aside/aside-links'
 import { RootLayoutProps } from './types'
 import { Header } from '../components/header/header'
 import { IconSizeContextProvider } from '@/context/icon-size-context'
@@ -29,7 +31,11 @@ export default function RootLayout({ children }: RootLayoutProps) {
             </header>
             <div className="flex gap-4 max-h-[calc(100vh-66px)]">
               <aside className="p-4 overflow-auto">
-                <Aside />
+                {/* 활성 표시는 usePathname 에 의존하므로 스트리밍하고,
+                    폴백으로 동일한 링크 목록을 렌더해 셸에 레이아웃을 고정한다 */}
+                <Suspense fallback={<AsideLinks />}>
+                  <Aside />
+                </Suspense>
               </aside>
               <main className="p-4 overflow-auto flex-1">{children}</main>
             </div>
