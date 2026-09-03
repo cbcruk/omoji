@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import { Suspense } from 'react'
 import { LibraryPageProps } from './types'
 import { Option } from 'effect'
-import { IconGroupSkeleton } from '@/components/icon-group/icon-group-skeleton'
+import { LibrarySkeleton } from './_components/LibrarySkeleton'
 import { LibraryGroupPage } from './_components/LibraryGroupPage'
 import { LibrarySubgroupPage } from './_components/LibrarySubgroupPage'
 
@@ -22,7 +22,7 @@ export async function generateMetadata({
  */
 export default function LibraryPage({ params }: LibraryPageProps) {
   return (
-    <Suspense fallback={<IconGroupSkeleton />}>
+    <Suspense fallback={<LibrarySkeleton />}>
       {params.then(({ slug }) => {
         const [group, subgroup] = slug
 
@@ -34,7 +34,7 @@ export default function LibraryPage({ params }: LibraryPageProps) {
             onNone() {
               return <LibraryGroupPage group={group} />
             },
-          })
+          }),
         )
       })}
     </Suspense>
