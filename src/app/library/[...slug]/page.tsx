@@ -34,7 +34,7 @@ export default function LibraryPage({ params }: LibraryPageProps) {
             onNone() {
               return <LibraryGroupPage group={group} />
             },
-          }),
+          })
         )
       })}
     </Suspense>

@@ -43,7 +43,9 @@ function SearchResult({ q }: SearchPageSearchParams) {
 export default function SearchPage({ searchParams }: SearchPageProps) {
   return (
     <Suspense fallback={<IconGroupSkeleton />}>
-      {searchParams.then(({ q }) => <SearchResult q={q} />)}
+      {searchParams.then(({ q }) => (
+        <SearchResult q={q} />
+      ))}
     </Suspense>
   )
 }
