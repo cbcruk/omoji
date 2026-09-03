@@ -1,134 +1,183 @@
 {
-  "smileys-emotion": [
-    "face-smiling",
-    "face-affection",
-    "face-tongue",
-    "face-hand",
-    "face-neutral-skeptical",
-    "face-sleepy",
-    "face-unwell",
-    "face-hat",
-    "face-glasses",
-    "face-concerned",
-    "face-negative",
-    "face-costume",
-    "cat-face",
-    "monkey-face",
-    "heart",
-    "emotion"
-  ],
-  "people-body": [
-    "hand-fingers-open",
-    "hand-fingers-partial",
-    "hand-single-finger",
-    "hand-fingers-closed",
-    "hands",
-    "hand-prop",
-    "body-parts",
-    "person",
-    "person-gesture",
-    "person-role",
-    "person-fantasy",
-    "person-activity",
-    "person-sport",
-    "person-resting",
-    "family",
-    "person-symbol"
-  ],
-  "component": ["skin-tone", "hair-style"],
-  "animals-nature": [
-    "animal-mammal",
-    "animal-bird",
-    "animal-amphibian",
-    "animal-reptile",
-    "animal-marine",
-    "animal-bug",
-    "plant-flower",
-    "plant-other"
-  ],
-  "food-drink": [
-    "food-fruit",
-    "food-vegetable",
-    "food-prepared",
-    "food-asian",
-    "food-sweet",
-    "drink",
-    "dishware"
-  ],
-  "travel-places": [
-    "place-map",
-    "place-geographic",
-    "place-building",
-    "place-religious",
-    "place-other",
-    "transport-ground",
-    "transport-water",
-    "transport-air",
-    "hotel",
-    "time",
-    "sky-weather"
-  ],
-  "activities": ["event", "award-medal", "sport", "game", "arts-crafts"],
-  "objects": [
-    "clothing",
-    "sound",
-    "music",
-    "musical-instrument",
-    "phone",
-    "computer",
-    "light-video",
-    "book-paper",
-    "money",
-    "mail",
-    "writing",
-    "office",
-    "lock",
-    "tool",
-    "science",
-    "medical",
-    "household",
-    "other-object"
-  ],
-  "symbols": [
-    "transport-sign",
-    "warning",
-    "arrow",
-    "religion",
-    "zodiac",
-    "av-symbol",
-    "gender",
-    "math",
-    "punctuation",
-    "currency",
-    "other-symbol",
-    "keycap",
-    "alphanum",
-    "geometric"
-  ],
-  "flags": ["flag", "country-flag", "subdivision-flag"],
-  "extras-openmoji": [
-    "animals-nature",
-    "brand",
-    "climate-environment",
-    "emergency",
-    "flags",
-    "food-drink",
-    "gardening",
-    "healthcare",
-    "interaction",
-    "objects",
-    "people",
-    "smileys-emotion",
-    "symbol-other",
-    "symbols",
-    "technology",
-    "travel-places",
-    "ui-element"
-  ],
-  "extras-unicode": [
-    "food-drink",
-    "regional-indicator",
-    "subdivision-flag",
-    "symbol-other"
-  ]
+  "smileys-emotion": {
+    "n": 169,
+    "sub": {
+      "face-smiling": 14,
+      "face-affection": 9,
+      "face-tongue": 6,
+      "face-hand": 7,
+      "face-neutral-skeptical": 16,
+      "face-sleepy": 6,
+      "face-unwell": 12,
+      "face-hat": 3,
+      "face-glasses": 3,
+      "face-concerned": 26,
+      "face-negative": 8,
+      "face-costume": 8,
+      "cat-face": 9,
+      "monkey-face": 3,
+      "heart": 25,
+      "emotion": 14
+    }
+  },
+  "people-body": {
+    "n": 2261,
+    "sub": {
+      "hand-fingers-open": 66,
+      "hand-fingers-partial": 54,
+      "hand-single-finger": 42,
+      "hand-fingers-closed": 36,
+      "hands": 62,
+      "hand-prop": 18,
+      "body-parts": 48,
+      "person": 168,
+      "person-gesture": 180,
+      "person-role": 492,
+      "person-fantasy": 157,
+      "person-activity": 327,
+      "person-sport": 233,
+      "person-resting": 30,
+      "family": 337,
+      "person-symbol": 11
+    }
+  },
+  "component": {
+    "n": 9,
+    "sub": {
+      "skin-tone": 5,
+      "hair-style": 4
+    }
+  },
+  "animals-nature": {
+    "n": 159,
+    "sub": {
+      "animal-mammal": 66,
+      "animal-bird": 22,
+      "animal-amphibian": 1,
+      "animal-reptile": 8,
+      "animal-marine": 17,
+      "animal-bug": 16,
+      "plant-flower": 12,
+      "plant-other": 17
+    }
+  },
+  "food-drink": {
+    "n": 131,
+    "sub": {
+      "food-fruit": 20,
+      "food-vegetable": 19,
+      "food-prepared": 34,
+      "food-asian": 17,
+      "food-sweet": 14,
+      "drink": 20,
+      "dishware": 7
+    }
+  },
+  "travel-places": {
+    "n": 218,
+    "sub": {
+      "place-map": 7,
+      "place-geographic": 9,
+      "place-building": 27,
+      "place-religious": 6,
+      "place-other": 17,
+      "transport-ground": 50,
+      "transport-water": 9,
+      "transport-air": 13,
+      "hotel": 2,
+      "time": 31,
+      "sky-weather": 47
+    }
+  },
+  "activities": {
+    "n": 85,
+    "sub": {
+      "event": 21,
+      "award-medal": 6,
+      "sport": 27,
+      "game": 24,
+      "arts-crafts": 7
+    }
+  },
+  "objects": {
+    "n": 264,
+    "sub": {
+      "clothing": 47,
+      "sound": 9,
+      "music": 9,
+      "musical-instrument": 12,
+      "phone": 6,
+      "computer": 14,
+      "light-video": 16,
+      "book-paper": 17,
+      "money": 10,
+      "mail": 13,
+      "writing": 7,
+      "office": 23,
+      "lock": 6,
+      "tool": 27,
+      "science": 7,
+      "medical": 7,
+      "household": 25,
+      "other-object": 9
+    }
+  },
+  "symbols": {
+    "n": 224,
+    "sub": {
+      "transport-sign": 13,
+      "warning": 13,
+      "arrow": 21,
+      "religion": 13,
+      "zodiac": 13,
+      "av-symbol": 25,
+      "gender": 3,
+      "math": 6,
+      "punctuation": 7,
+      "currency": 2,
+      "other-symbol": 22,
+      "keycap": 13,
+      "alphanum": 39,
+      "geometric": 34
+    }
+  },
+  "flags": {
+    "n": 270,
+    "sub": {
+      "flag": 8,
+      "country-flag": 259,
+      "subdivision-flag": 3
+    }
+  },
+  "extras-openmoji": {
+    "n": 381,
+    "sub": {
+      "animals-nature": 12,
+      "brand": 50,
+      "climate-environment": 26,
+      "emergency": 57,
+      "flags": 22,
+      "food-drink": 13,
+      "gardening": 9,
+      "healthcare": 38,
+      "interaction": 14,
+      "objects": 19,
+      "people": 12,
+      "smileys-emotion": 4,
+      "symbol-other": 11,
+      "symbols": 2,
+      "technology": 27,
+      "travel-places": 23,
+      "ui-element": 42
+    }
+  },
+  "extras-unicode": {
+    "n": 121,
+    "sub": {
+      "food-drink": 7,
+      "regional-indicator": 26,
+      "subdivision-flag": 28,
+      "symbol-other": 60
+    }
+  }
 }

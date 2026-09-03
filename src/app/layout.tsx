@@ -7,6 +7,7 @@ import { AsideLinks } from '../components/aside/aside-links'
 import { RootLayoutProps } from './types'
 import { Header } from '../components/header/header'
 import { IconSizeContextProvider } from '@/context/icon-size-context'
+import { PendingIconCountContextProvider } from '@/context/pending-icon-count-context'
 
 const notoSansMono = Noto_Sans_Mono({
   subsets: ['latin'],
@@ -25,22 +26,24 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang="en">
       <body className={notoSansMono.className}>
         <IconSizeContextProvider>
-          <div className="flex flex-col">
-            <header className="sticky top-0 h-[66px] p-4">
-              <Header />
-            </header>
-            <div className="flex gap-4 max-h-[calc(100vh-66px)]">
-              <aside className="p-4 overflow-auto">
-                {/* 활성 표시는 usePathname 에 의존하므로 스트리밍하고,
+          <PendingIconCountContextProvider>
+            <div className="flex flex-col">
+              <header className="sticky top-0 h-[66px] p-4">
+                <Header />
+              </header>
+              <div className="flex gap-4 max-h-[calc(100vh-66px)]">
+                <aside className="p-4 overflow-auto">
+                  {/* 활성 표시는 usePathname 에 의존하므로 스트리밍하고,
                     폴백으로 동일한 링크 목록을 렌더해 셸에 레이아웃을 고정한다 */}
-                <Suspense fallback={<AsideLinks />}>
-                  <Aside />
-                </Suspense>
-              </aside>
-              <main className="p-4 overflow-auto flex-1">{children}</main>
+                  <Suspense fallback={<AsideLinks />}>
+                    <Aside />
+                  </Suspense>
+                </aside>
+                <main className="p-4 overflow-auto flex-1">{children}</main>
+              </div>
+              <footer />
             </div>
-            <footer />
-          </div>
+          </PendingIconCountContextProvider>
         </IconSizeContextProvider>
       </body>
     </html>
