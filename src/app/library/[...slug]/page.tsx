@@ -1,6 +1,8 @@
 import { Metadata } from 'next'
+import { Suspense } from 'react'
 import { LibraryPageProps } from './types'
 import { Option } from 'effect'
+import { IconGroupSkeleton } from '@/components/icon-group/icon-group-skeleton'
 import { LibraryGroupPage } from './_components/LibraryGroupPage'
 import { LibrarySubgroupPage } from './_components/LibrarySubgroupPage'
 
@@ -14,18 +16,27 @@ export async function generateMetadata({
   }
 }
 
-export default async function LibraryPage({ params }: LibraryPageProps) {
-  const { slug } = await params
-  const [group, subgroup] = slug
+/**
+ * `params` 를 await 하지 않고 Suspense 안으로 넘겨서, 클릭 즉시 보여줄
+ * 로딩 셸(App Shell)이 프리렌더/프리페치 대상으로 남도록 한다.
+ */
+export default function LibraryPage({ params }: LibraryPageProps) {
+  return (
+    <Suspense fallback={<IconGroupSkeleton />}>
+      {params.then(({ slug }) => {
+        const [group, subgroup] = slug
 
-  return Option.fromNullable(subgroup).pipe(
-    Option.match({
-      onSome(subgroup) {
-        return <LibrarySubgroupPage group={group} subgroup={subgroup} />
-      },
-      onNone() {
-        return <LibraryGroupPage group={group} />
-      },
-    })
+        return Option.fromNullable(subgroup).pipe(
+          Option.match({
+            onSome(subgroup) {
+              return <LibrarySubgroupPage group={group} subgroup={subgroup} />
+            },
+            onNone() {
+              return <LibraryGroupPage group={group} />
+            },
+          })
+        )
+      })}
+    </Suspense>
   )
 }

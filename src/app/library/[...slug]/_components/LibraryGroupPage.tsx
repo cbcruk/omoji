@@ -1,16 +1,10 @@
 import { IconGroup } from '@/components/icon-group/icon-group'
-import { EmojiService } from '@/services/Emoji'
+import { getCachedListByGroup } from '@/services/emoji-cache'
 import { LibraryGroupPageProps } from '../types'
 import { Effect } from 'effect'
 
-export async function LibraryGroupPage({ group }: LibraryGroupPageProps) {
-  return Effect.gen(function* () {
-    const emojiService = yield* EmojiService
-    const result = yield* emojiService.getListByGroup({ group })
-
-    return result
-  }).pipe(
-    Effect.provide(EmojiService.Default),
+export function LibraryGroupPage({ group }: LibraryGroupPageProps) {
+  return Effect.tryPromise(() => getCachedListByGroup({ group })).pipe(
     Effect.match({
       onSuccess(rows) {
         return <IconGroup items={rows} />
