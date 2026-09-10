@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation'
 import { IconGroup } from '@/components/icon-group/icon-group'
 import { getCachedListByGroup } from '@/services/emoji-cache'
 import { LibraryGroupPageProps } from '../types'
@@ -8,6 +9,11 @@ import { LibraryGroupPageProps } from '../types'
  */
 export async function LibraryGroupPage({ group }: LibraryGroupPageProps) {
   const rows = await getCachedListByGroup({ group })
+
+  // 없는 그룹에 빈 목록을 200 으로 주지 않는다.
+  if (rows.length === 0) {
+    notFound()
+  }
 
   return <IconGroup items={rows} />
 }

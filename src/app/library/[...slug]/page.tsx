@@ -1,7 +1,9 @@
 import { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 import { LibraryPageProps } from './types'
-import { Option } from 'effect'
+import { Either, Option } from 'effect'
+import { decodeLibraryPageParams } from './schema'
 import { LibrarySkeleton } from './_components/LibrarySkeleton'
 import { LibraryGroupPage } from './_components/LibraryGroupPage'
 import { LibrarySubgroupPage } from './_components/LibrarySubgroupPage'
@@ -23,20 +25,27 @@ export async function generateMetadata({
 export default function LibraryPage({ params }: LibraryPageProps) {
   return (
     <Suspense fallback={<LibrarySkeleton />}>
-      {params.then(({ slug }) => {
-        const [group, subgroup] = slug
-
-        return Option.fromNullable(subgroup).pipe(
-          Option.match({
-            onSome(subgroup) {
-              return <LibrarySubgroupPage group={group} subgroup={subgroup} />
-            },
-            onNone() {
-              return <LibraryGroupPage group={group} />
+      {params.then((params) =>
+        decodeLibraryPageParams(params).pipe(
+          Either.match({
+            onLeft: () => notFound(),
+            onRight({ slug: [group, subgroup] }) {
+              return Option.fromNullable(subgroup).pipe(
+                Option.match({
+                  onSome(subgroup) {
+                    return (
+                      <LibrarySubgroupPage group={group} subgroup={subgroup} />
+                    )
+                  },
+                  onNone() {
+                    return <LibraryGroupPage group={group} />
+                  },
+                })
+              )
             },
           })
         )
-      })}
+      )}
     </Suspense>
   )
 }
