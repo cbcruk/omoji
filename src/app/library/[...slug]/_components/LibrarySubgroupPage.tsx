@@ -1,23 +1,16 @@
 import { IconGroup } from '@/components/icon-group/icon-group'
 import { getCachedListBySubgroup } from '@/services/emoji-cache'
-import { Effect } from 'effect'
 import { LibrarySubgroupPageProps } from '../types'
 
-export function LibrarySubgroupPage({
+/**
+ * 캐시된 함수의 실패와 Next 의 프리렌더 제어 흐름은 그대로 흘려보낸다.
+ * 여기서 잡으면 프레임워크가 처리해야 할 예외까지 삼킨다.
+ */
+export async function LibrarySubgroupPage({
   group,
   subgroup,
 }: LibrarySubgroupPageProps) {
-  return Effect.tryPromise(() =>
-    getCachedListBySubgroup({ group, subgroup })
-  ).pipe(
-    Effect.match({
-      onSuccess(rows) {
-        return <IconGroup items={rows} />
-      },
-      onFailure(error) {
-        return <pre>{JSON.stringify(error, null, 2)}</pre>
-      },
-    }),
-    Effect.runPromise
-  )
+  const rows = await getCachedListBySubgroup({ group, subgroup })
+
+  return <IconGroup items={rows} />
 }

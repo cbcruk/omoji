@@ -1,6 +1,7 @@
 import { cacheLife, cacheTag } from 'next/cache'
 import { Effect } from 'effect'
 import { EmojiService } from './Emoji'
+import { appRuntime } from '@/runtime/app-runtime'
 import {
   LibraryGroupPageProps,
   LibrarySubgroupPageProps,
@@ -18,11 +19,13 @@ export async function getCachedListByGroup({ group }: LibraryGroupPageProps) {
   cacheLife('days')
   cacheTag('emoji', `emoji-group-${group}`)
 
-  return Effect.gen(function* () {
-    const emojiService = yield* EmojiService
+  return appRuntime.runPromise(
+    Effect.gen(function* () {
+      const emojiService = yield* EmojiService
 
-    return yield* emojiService.getListByGroup({ group })
-  }).pipe(Effect.provide(EmojiService.Default), Effect.runPromise)
+      return yield* emojiService.getListByGroup({ group })
+    })
+  )
 }
 
 export async function getCachedListBySubgroup({
@@ -33,9 +36,11 @@ export async function getCachedListBySubgroup({
   cacheLife('days')
   cacheTag('emoji', `emoji-group-${group}`)
 
-  return Effect.gen(function* () {
-    const emojiService = yield* EmojiService
+  return appRuntime.runPromise(
+    Effect.gen(function* () {
+      const emojiService = yield* EmojiService
 
-    return yield* emojiService.getListBySubgroup({ group, subgroup })
-  }).pipe(Effect.provide(EmojiService.Default), Effect.runPromise)
+      return yield* emojiService.getListBySubgroup({ group, subgroup })
+    })
+  )
 }

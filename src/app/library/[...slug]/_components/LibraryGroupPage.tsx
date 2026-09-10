@@ -1,18 +1,13 @@
 import { IconGroup } from '@/components/icon-group/icon-group'
 import { getCachedListByGroup } from '@/services/emoji-cache'
 import { LibraryGroupPageProps } from '../types'
-import { Effect } from 'effect'
 
-export function LibraryGroupPage({ group }: LibraryGroupPageProps) {
-  return Effect.tryPromise(() => getCachedListByGroup({ group })).pipe(
-    Effect.match({
-      onSuccess(rows) {
-        return <IconGroup items={rows} />
-      },
-      onFailure(error) {
-        return <pre>{JSON.stringify(error, null, 2)}</pre>
-      },
-    }),
-    Effect.runPromise
-  )
+/**
+ * 캐시된 함수의 실패와 Next 의 프리렌더 제어 흐름은 그대로 흘려보낸다.
+ * 여기서 잡으면 프레임워크가 처리해야 할 예외까지 삼킨다.
+ */
+export async function LibraryGroupPage({ group }: LibraryGroupPageProps) {
+  const rows = await getCachedListByGroup({ group })
+
+  return <IconGroup items={rows} />
 }
