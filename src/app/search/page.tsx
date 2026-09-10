@@ -4,8 +4,9 @@ import { IconGroup } from '../../components/icon-group/icon-group'
 import { IconGroupSkeleton } from '../../components/icon-group/icon-group-skeleton'
 import { Effect } from 'effect'
 import { EmojiService } from '@/services/Emoji'
+import { renderEffect } from '@/runtime/render'
 import { SearchPageProps, SearchPageSearchParams } from './types'
-import { validateSearchQueryGen } from './helpers'
+import { validateSearchQuery } from './helpers'
 
 export async function generateMetadata({
   searchParams,
@@ -18,25 +19,14 @@ export async function generateMetadata({
 }
 
 function SearchResult({ q }: SearchPageSearchParams) {
-  return Effect.gen(function* () {
-    yield* validateSearchQueryGen(q)
+  return renderEffect(
+    Effect.gen(function* () {
+      const query = yield* validateSearchQuery(q)
+      const emojiService = yield* EmojiService
 
-    const pattern = `%${q}%`
-    const emojiService = yield* EmojiService
-    const result = yield* emojiService.searchList(pattern)
-
-    return result
-  }).pipe(
-    Effect.provide(EmojiService.Default),
-    Effect.match({
-      onSuccess(rows) {
-        return <IconGroup items={rows} />
-      },
-      onFailure(error) {
-        return <pre>{JSON.stringify(error, null, 2)}</pre>
-      },
+      return yield* emojiService.searchList(query)
     }),
-    Effect.runPromise
+    (rows) => <IconGroup items={rows} />
   )
 }
 

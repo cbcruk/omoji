@@ -1,18 +1,9 @@
-import { Data, Effect } from 'effect'
+import { Effect } from 'effect'
+import { UserFacingError } from '@/runtime/errors'
 import { SearchPageSearchParams } from './types'
 
-class SearchParamsError extends Data.TaggedError('SearchParamsError')<{
-  readonly message: string
-  readonly cause?: unknown
-}> {}
-
-export const validateSearchQueryGen = (q: SearchPageSearchParams['q']) =>
-  Effect.gen(function* () {
-    if (!q) {
-      yield* Effect.fail(
-        new SearchParamsError({
-          message: '검색어를 입력해주세요.',
-        })
-      )
-    }
-  })
+/** 통과하면 검색어가 빈 값이 아님이 타입으로도 보장된다. */
+export const validateSearchQuery = (q: SearchPageSearchParams['q']) =>
+  q
+    ? Effect.succeed(q)
+    : Effect.fail(new UserFacingError({ message: '검색어를 입력해주세요.' }))

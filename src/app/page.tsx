@@ -5,6 +5,7 @@ import { IconGroup } from '../components/icon-group/icon-group'
 import { IconGroupSkeleton } from '../components/icon-group/icon-group-skeleton'
 import { Effect } from 'effect'
 import { EmojiService } from '@/services/Emoji'
+import { renderEffect } from '@/runtime/render'
 
 export const metadata: Metadata = {
   title: '홈 | 오픈모지',
@@ -14,22 +15,13 @@ export const metadata: Metadata = {
 async function RandomIconGroup() {
   await connection()
 
-  return Effect.gen(function* () {
-    const emojiService = yield* EmojiService
-    const result = yield* emojiService.getRandomList()
+  return renderEffect(
+    Effect.gen(function* () {
+      const emojiService = yield* EmojiService
 
-    return result
-  }).pipe(
-    Effect.provide(EmojiService.Default),
-    Effect.match({
-      onSuccess(rows) {
-        return <IconGroup items={rows} />
-      },
-      onFailure(error) {
-        return <pre>{JSON.stringify(error, null, 2)}</pre>
-      },
+      return yield* emojiService.getRandomList()
     }),
-    Effect.runPromise
+    (rows) => <IconGroup items={rows} />
   )
 }
 
