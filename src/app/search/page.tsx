@@ -6,7 +6,7 @@ import { Effect } from 'effect'
 import { EmojiService } from '@/services/Emoji'
 import { renderEffect } from '@/runtime/render'
 import { SearchPageProps, SearchPageSearchParams } from './types'
-import { validateSearchQuery } from './helpers'
+import { decodeSearchQuery } from './helpers'
 
 export async function generateMetadata({
   searchParams,
@@ -21,7 +21,7 @@ export async function generateMetadata({
 function SearchResult({ q }: SearchPageSearchParams) {
   return renderEffect(
     Effect.gen(function* () {
-      const query = yield* validateSearchQuery(q)
+      const query = yield* decodeSearchQuery({ q })
       const emojiService = yield* EmojiService
 
       return yield* emojiService.searchList(query)
