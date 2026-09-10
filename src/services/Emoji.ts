@@ -64,13 +64,16 @@ export class EmojiService extends Effect.Service<EmojiService>()(
 
             return row.tree
           }),
-        searchList: (pattern: string) =>
+        // 검색어는 바인딩 파라미터로만 넘긴다. 문자열 보간은 SQL 인젝션이 된다.
+        searchList: (query: string) =>
           Effect.gen(function* () {
+            const pattern = `%${query}%`
             const result = yield* turso.execute({
-              sql: `SELECT * FROM openmoji WHERE 
-              annotation LIKE '${pattern}' OR
-              tags LIKE '${pattern}' OR
-              openmoji_tags LIKE '${pattern}'`,
+              sql: `SELECT * FROM openmoji WHERE
+              annotation LIKE ? OR
+              tags LIKE ? OR
+              openmoji_tags LIKE ?`,
+              args: [pattern, pattern, pattern],
             })
             const rows = yield* decodeEmojiArraySchema(result.rows)
 
